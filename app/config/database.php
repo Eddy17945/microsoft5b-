@@ -3,9 +3,9 @@
 class Database {
     private $host = "127.0.0.1"; // Localhost
     private $port = "3306";       // Puerto MySQL
-    private $db_name = "registro_personal"; // Nombre de tu BD
-    private $username = "root";   // Usuario
-    private $password = "lmmjvsd"; // Tu contraseña
+    private $db_name = "microsoft5bx"; // Nombre de tu BD
+    private $username = "microsoft5bx";   // Usuario
+    private $password = "Microsoft5b"; // Tu contraseña
     private $conn;
 
     public function getConnection() {
