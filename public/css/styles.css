@@ -78,3 +78,99 @@ body {
         margin-bottom: 10px;
     }
 }
+
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Estilos para el dashboard */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.text-primary, .text-success, .text-info {
+    opacity: 0.9;
+}
+
+.card:hover .text-primary, 
+.card:hover .text-success, 
+.card:hover .text-info {
+    opacity: 1;
+}
+
+/* Estilos para tablas */
+.table {
+    background-color: white;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para formularios */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Estilos para el navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el footer */
+footer {
+    margin-top: auto;
+}
+
+/* Estilos para los iconos en el dashboard */
+.fa-users, .fa-map-marker-alt, .fa-phone {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .fa-users, 
+.card:hover .fa-map-marker-alt, 
+.card:hover .fa-phone {
+    transform: scale(1.1);
+}
+
+/* Estilos para las estadísticas */
+#totalPersonas, #totalDirecciones, #totalTelefonos {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    #totalPersonas, #totalDirecciones, #totalTelefonos {
+        font-size: 1.5rem;
+    }
+}

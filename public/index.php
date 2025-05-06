@@ -41,12 +41,28 @@ $action = preg_replace('/[^a-z]/', '', strtolower($action));
 $id = filter_var($id, FILTER_VALIDATE_INT);  
 
 // Cargar configuración de la base de datos 
-require_once APP_PATH . '/config/database.php';  
+require_once APP_PATH . '/config/database.php';
+
+// IMPORTANTE: Asegúrate de que la variable $conn esté disponible desde database.php
+// Si no está disponible directamente, necesitarás ajustar el código adecuadamente
 
 // Definir ruta base de vistas
 define('VIEWS_PATH', APP_PATH . '/views/');
 
 try {     
+    // Inicializar estadísticas
+    $stats = ['personas' => 0, 'direcciones' => 0, 'telefonos' => 0];
+    
+    // Cargar helper de contador si existe y si la conexión está disponible
+    if (isset($conn) && $conn instanceof PDO) {
+        $counterFile = APP_PATH . "/helpers/CounterHelper.php";
+        if (file_exists($counterFile)) {
+            require_once $counterFile;
+            $counter = new CounterHelper($conn);
+            $stats = $counter->getStats();
+        }
+    }
+
     // Instanciar el controlador     
     $controllerClassName = ucfirst($controller) . 'Controller';     
     $controllerFile = APP_PATH . "/controllers/{$controllerClassName}.php";          
