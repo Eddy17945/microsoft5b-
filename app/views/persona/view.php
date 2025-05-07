@@ -93,7 +93,7 @@
             </tbody>
         </table>
         <?php else: ?>
-        <div class="alert alert-info">No hay teléfonos registrados</div>
+        <div class="alert alert-info">No hay teléfonos</div>
         <?php endif; ?>
     </div>
 </div>
