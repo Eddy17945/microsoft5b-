@@ -1,4 +1,5 @@
 <?php
+// Aquí estuvo Andreina Crespo
 // Asegurarse de que existen las variables necesarias
 $sexos = $sexos ?? [];
 $estadosCiviles = $estadosCiviles ?? [];
