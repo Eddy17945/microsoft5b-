@@ -1,5 +1,7 @@
 <?php
-session_start();
+// Habilitar errores para depuración (Eliminar en producción)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Configuración de seguridad básica
 header("X-Frame-Options: DENY");
@@ -10,99 +12,6 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Constantes de rutas
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');  
-
-// Autoload de clases 
-spl_autoload_register(function ($class) {     
-    $file = APP_PATH . '/' . str_replace('\\', '/', $class) . '.php';     
-    if (file_exists($file)) {         
-        require $file;     
-    } 
-});  
-
-// Manejo de errores 
-set_error_handler(function($errno, $errstr, $errfile, $errline) {     
-    error_log("Error: [$errno] $errstr in $errfile on line $errline");     
-    if (ini_get('display_errors')) {         
-        echo "<div class='alert alert-danger'>Error: $errstr</div>";     
-    } 
-});  
-
-// Obtener parámetros de la URL 
-$controller = $_GET['controller'] ?? 'persona'; 
-$action = $_GET['action'] ?? 'index'; 
-$id = $_GET['id'] ?? null;  
-
-// Validar y sanitizar entradas 
-$controller = preg_replace('/[^a-z]/', '', strtolower($controller)); 
-$action = preg_replace('/[^a-z]/', '', strtolower($action)); 
-$id = filter_var($id, FILTER_VALIDATE_INT);  
-
-// Cargar configuración de la base de datos 
-require_once APP_PATH . '/config/database.php';
-
-// IMPORTANTE: Asegúrate de que la variable $conn esté disponible desde database.php
-// Si no está disponible directamente, necesitarás ajustar el código adecuadamente
-
-// Definir ruta base de vistas
-define('VIEWS_PATH', APP_PATH . '/views/');
-
-try {     
-    // Inicializar estadísticas
-    $stats = ['personas' => 0, 'direcciones' => 0, 'telefonos' => 0];
-    
-    // Cargar helper de contador si existe y si la conexión está disponible
-    if (isset($conn) && $conn instanceof PDO) {
-        $counterFile = APP_PATH . "/helpers/CounterHelper.php";
-        if (file_exists($counterFile)) {
-            require_once $counterFile;
-            $counter = new CounterHelper($conn);
-            $stats = $counter->getStats();
-        }
-    }
-
-    // Instanciar el controlador     
-    $controllerClassName = ucfirst($controller) . 'Controller';     
-    $controllerFile = APP_PATH . "/controllers/{$controllerClassName}.php";          
-    
-    if (!file_exists($controllerFile)) {         
-        throw new Exception("Controlador no encontrado: {$controllerFile}");     
-    }          
-    
-    // Incluir explícitamente el archivo del controlador
-    require_once $controllerFile;
-    
-    // Instanciar el controlador
-    $controllerInstance = new $controllerClassName();
-    
-    // Verificar que el método (acción) existe
-    if (!method_exists($controllerInstance, $action)) {
-        throw new Exception("Acción no encontrada: {$action}");
-    }
-    
-    // Obtener el contenido de la vista 
-    ob_start(); 
-    if ($id !== false && $id !== null) {     
-        $controllerInstance->$action($id); 
-    } else {     
-        $controllerInstance->$action(); 
-    } 
-    $content = ob_get_clean();  
-    
-    // Incluir layout principal 
-    require VIEWS_PATH . 'layouts/main.php';  
-    
-} catch (PDOException $e) {     
-    error_log("Error de base de datos: " . $e->getMessage());     
-    $_SESSION['error'] = "Error de conexión con la base de datos";     
-    header("Location: error.php");
-    exit();
-} catch (Exception $e) {     
-    error_log("Error general: " . $e->getMessage());     
-    $_SESSION['error'] = $e->getMessage();     
-    header("Location: error.php");
-    exit();
-} 
+// Cargar rutas
+require_once '../routes/web.php';
 ?>
