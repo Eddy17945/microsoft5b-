@@ -5,7 +5,7 @@ class Database {
     private $port = "3306";       // Puerto MySQL
     private $db_name = "microsoft5bx"; // Nombre de tu BD
     private $username = "microsoft5bx";   // Usuario
-    private $password = "Microsoft5b"; // Tu contraseña
+    private $password = "microsoft5bx"; // Tu contraseña
 
     
     private $conn;
