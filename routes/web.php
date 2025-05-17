@@ -49,7 +49,7 @@ if (empty($controller)) {
         }
         
         // Incluir layout principal con el menú
-        require_once APP_PATH . "/views/layouts/main.php";
+        include_once APP_PATH . "/views/layouts/main.php";
         exit;
     } else {
         // Si hay un controlador en la URL (formato: controlador/acción)
@@ -214,7 +214,7 @@ switch ($controller) {
         }
         
         // Incluir layout principal con el menú
-        require_once APP_PATH . "/views/layouts/main.php";
+        include_once APP_PATH . "/views/layouts/main.php";
         break;
 }
 ?>
