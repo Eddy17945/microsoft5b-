@@ -50,4 +50,7 @@ $content = ob_get_clean();
     </tbody>
 </table>
 
+
+require_once APP_PATH . '/views/layouts/main.php';
+
 <?php  ?>

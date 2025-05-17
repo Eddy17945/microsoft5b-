@@ -3,6 +3,12 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Definir la ruta base del proyecto
+define('BASE_PATH', dirname(__DIR__));
+
+// Iniciar sesión
+session_start();
+
 // Configuración de seguridad básica
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
@@ -13,5 +19,5 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 // Cargar rutas
-require_once '../routes/web.php';
+require_once BASE_PATH . '/routes/web.php';
 ?>
