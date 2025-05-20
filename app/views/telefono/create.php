@@ -13,8 +13,8 @@ if (ob_get_level() == 0) ob_start();
         <label for="id_persona" class="form-label">Persona</label>
         <select class="form-select" id="id_persona" name="id_persona" required>
             <option value="">Seleccione una persona</option>
-            <?php foreach ($personas as $persona): ?>
-            <option value="<?= $persona['id_persona'] ?>"><?= htmlspecialchars($persona['nombre'] . ' ' . $persona['apellido']) ?></option>
+            <?php foreach ($personas as $persona_item): ?>
+            <option value="<?= $persona_item['id_persona'] ?>"><?= htmlspecialchars($persona_item['nombre'] . ' ' . $persona_item['apellido']) ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -50,7 +50,6 @@ if (ob_get_level() == 0) ob_start();
     <a href="/public/index.php?controller=telefono&action=index" class="btn btn-secondary">Cancelar</a>
     <?php endif; ?>
 </form>
-
 <?php
 
 ?>

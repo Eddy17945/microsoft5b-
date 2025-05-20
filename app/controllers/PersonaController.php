@@ -7,7 +7,6 @@ class PersonaController {
     
     public function __construct() {
         // Include necessary files
-        
         require_once APP_PATH . '/models/Persona.php';
         require_once APP_PATH . '/models/Sexo.php';
         require_once APP_PATH . '/models/EstadoCivil.php';
@@ -28,12 +27,15 @@ class PersonaController {
         $result = $this->persona->readAll();
         $personas = $result->fetchAll(PDO::FETCH_ASSOC);
         
-        // Include view
-        require APP_PATH . '/views/persona/index.php';
+        // Capturar salida en buffer
+        ob_start();
+        include APP_PATH . '/views/persona/index.php';
+        $content = ob_get_clean();
+        
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
-
   
-    
     // Display form to create a new person
     public function create() {
         // Get all sexo options
@@ -42,8 +44,13 @@ class PersonaController {
         // Get all estado civil options
         $estadosCiviles = $this->estadoCivil->readAll()->fetchAll(PDO::FETCH_ASSOC);
         
-        // Include view
-        require  APP_PATH .'/views/persona/create.php';
+        // Capturar salida en buffer
+        ob_start();
+        include APP_PATH .'/views/persona/create.php';
+        $content = ob_get_clean();
+        
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
     
     // Store a new person in database
@@ -58,11 +65,26 @@ class PersonaController {
             
             // Create the person
             if ($this->persona->create()) {
-                header('Location: index.php?controller=persona&action=index');
+                $_SESSION['message'] = "Persona creada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
                 exit();
             } else {
                 // If creation failed
-                require APP_PATH . '/views/persona/create.php';
+                $_SESSION['message'] = "Error al crear la persona";
+                $_SESSION['message_type'] = "danger";
+                
+                // Get all sexo options and estado civil for the form again
+                $sexos = $this->sexo->readAll()->fetchAll(PDO::FETCH_ASSOC);
+                $estadosCiviles = $this->estadoCivil->readAll()->fetchAll(PDO::FETCH_ASSOC);
+                
+                // Capturar salida en buffer
+                ob_start();
+                include APP_PATH . '/views/persona/create.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             }
         }
     }
@@ -80,10 +102,17 @@ class PersonaController {
                 // Get all estado civil options
                 $estadosCiviles = $this->estadoCivil->readAll()->fetchAll(PDO::FETCH_ASSOC);
                 
-                // Include view
-                include APP_PATH .  '/views/persona/edit.php';
+                // Capturar salida en buffer
+                ob_start();
+                include APP_PATH . '/views/persona/edit.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: index.php?controller=persona&action=index');
+                $_SESSION['message'] = "Persona no encontrada";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
                 exit();
             }
         }
@@ -102,10 +131,14 @@ class PersonaController {
             
             // Update the person
             if ($this->persona->update()) {
-                header('Location: index.php?controller=persona&action=index');
+                $_SESSION['message'] = "Persona actualizada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
                 exit();
             } else {
                 // If update failed
+                $_SESSION['message'] = "Error al actualizar la persona";
+                $_SESSION['message_type'] = "danger";
                 $this->edit();
             }
         }
@@ -129,22 +162,21 @@ class PersonaController {
                 $resultTelefonos = $telefono->readByPersona($this->persona->id_persona);
                 $telefonos = $resultTelefonos->fetchAll(PDO::FETCH_ASSOC);
                 
-                // Include view
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/persona/view.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: /public/index.php?controller=persona&action=index');
+                $_SESSION['message'] = "Persona no encontrada";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
                 exit();
             }
         }
     }
-
-
-
-
-    
-    
-    
-   
     
     // Delete a person
     public function delete() {
@@ -152,10 +184,15 @@ class PersonaController {
             $this->persona->id_persona = $_GET['id'];
             
             if ($this->persona->delete()) {
-                header('Location: index.php?controller=persona&action=index');
+                $_SESSION['message'] = "Persona eliminada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
                 exit();
             } else {
-                echo "Failed to delete person.";
+                $_SESSION['message'] = "Error al eliminar la persona";
+                $_SESSION['message_type'] = "danger";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
+                exit();
             }
         }
     }

@@ -1,7 +1,9 @@
 RewriteEngine On
 RewriteBase /microsoft5b-/public/
 
-# Si la solicitud no apunta a un archivo o directorio real, redirigirla a index.php
+# Si es un archivo o directorio real, no hacer nada
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+
+# Redirigir a index.php manteniendo los parámetros de consulta
+RewriteRule ^(.*)$ index.php [QSA,L]

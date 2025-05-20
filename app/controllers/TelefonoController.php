@@ -24,8 +24,13 @@ class TelefonoController {
         $result = $this->telefono->readAll();
         $telefonos = $result->fetchAll(PDO::FETCH_ASSOC);
         
-        // Include view
+        // Capturar salida en buffer
+        ob_start();
         include APP_PATH . '/views/telefono/index.php';
+        $content = ob_get_clean();
+        
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
     
     // Display form to create a new phone number
@@ -35,7 +40,8 @@ class TelefonoController {
         if ($id_persona) {
             // Si se proporciona un id_persona, obtener los datos de la persona
             $this->persona->id_persona = $id_persona;
-            $persona = $this->persona->readOne();
+            $this->persona->readOne();
+            $persona = $this->persona; // Asignar el objeto persona completo
         } else {
             // Get all personas para el dropdown
             $result = $this->persona->readAll();
@@ -47,12 +53,16 @@ class TelefonoController {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
         
-        // Include view
+        // Capturar salida en buffer
+        ob_start();
         include APP_PATH . '/views/telefono/create.php';
+        $content = ob_get_clean();
+        
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
     
     // Store a new phone number in database
-   
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Verificar token CSRF
@@ -67,27 +77,42 @@ class TelefonoController {
             
             // Create the phone number
             if ($this->telefono->create()) {
+                $_SESSION['message'] = "Teléfono creado exitosamente";
+                $_SESSION['message_type'] = "success";
+                
                 // Redirigir a la vista de la persona si venimos de ahí
                 if (isset($_GET['id_persona'])) {
-                    header('Location: /public/index.php?controller=persona&action=view&id=' . $_GET['id_persona']);
+                    header('Location: ' . BASE_URL . 'index.php?controller=persona&action=view&id=' . $_GET['id_persona']);
                 } else {
-                    header('Location: /public/index.php?controller=telefono&action=index');
+                    header('Location: ' . BASE_URL . 'index.php?controller=telefono&action=index');
                 }
                 exit();
             } else {
                 // If creation failed
+                $_SESSION['message'] = "Error al crear el teléfono";
+                $_SESSION['message_type'] = "danger";
+                
                 if (isset($_GET['id_persona'])) {
                     $id_persona = $_GET['id_persona'];
                     $this->persona->id_persona = $id_persona;
-                    $persona = $this->persona->readOne();
+                    $this->persona->readOne();
+                    $persona = $this->persona; // Asignar el objeto persona completo
                 } else {
                     $result = $this->persona->readAll();
                     $personas = $result->fetchAll(PDO::FETCH_ASSOC);
                 }
+                
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/telefono/create.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             }
         }
     }
+    
     // Display form to edit a phone number
     public function edit() {
         if (isset($_GET['id'])) {
@@ -95,10 +120,22 @@ class TelefonoController {
             
             // Get the phone data
             if ($this->telefono->readOne()) {
-                // Include view
+                // Generate CSRF token if not exists
+                if (!isset($_SESSION['csrf_token'])) {
+                    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                }
+                
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/telefono/edit.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: /public/index.php?controller=telefono&action=index');
+                $_SESSION['message'] = "Teléfono no encontrado";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=telefono&action=index');
                 exit();
             }
         }
@@ -125,11 +162,22 @@ class TelefonoController {
             
             // Update the phone number
             if ($this->telefono->update()) {
-                header('Location: /public/index.php?controller=persona&action=view&id=' . $this->telefono->id_persona);
+                $_SESSION['message'] = "Teléfono actualizado exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=view&id=' . $this->telefono->id_persona);
                 exit();
             } else {
                 // If update failed
+                $_SESSION['message'] = "Error al actualizar el teléfono";
+                $_SESSION['message_type'] = "danger";
+                
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/telefono/edit.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             }
         }
     }
@@ -145,10 +193,17 @@ class TelefonoController {
                 $this->persona->id_persona = $this->telefono->id_persona;
                 $this->persona->readOne();
                 
-                // Include view
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/telefono/view.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: /public/index.php?controller=telefono&action=index');
+                $_SESSION['message'] = "Teléfono no encontrado";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=telefono&action=index');
                 exit();
             }
         }
@@ -171,11 +226,16 @@ class TelefonoController {
             $id_persona = $old_telefono->id_persona;
             
             if ($this->telefono->delete()) {
+                $_SESSION['message'] = "Teléfono eliminado exitosamente";
+                $_SESSION['message_type'] = "success";
                 // Redirigir a la vista de la persona
-                header('Location: /public/index.php?controller=persona&action=view&id=' . $id_persona);
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=view&id=' . $id_persona);
                 exit();
             } else {
-                echo "Error al eliminar el teléfono.";
+                $_SESSION['message'] = "Error al eliminar el teléfono";
+                $_SESSION['message_type'] = "danger";
+                header('Location: ' . BASE_URL . 'index.php?controller=persona&action=view&id=' . $id_persona);
+                exit();
             }
         }
     }
@@ -193,10 +253,17 @@ class TelefonoController {
             $result = $this->telefono->readByPersona($id_persona);
             $telefonos = $result->fetchAll(PDO::FETCH_ASSOC);
             
-            // Include view
+            // Capturar salida en buffer
+            ob_start();
             include APP_PATH . '/views/telefono/by_persona.php';
+            $content = ob_get_clean();
+            
+            // Incluir layout principal con contenido
+            include_once APP_PATH . '/views/layouts/main.php';
         } else {
-            header('Location: /public/index.php?controller=persona&action=index');
+            $_SESSION['message'] = "Persona no especificada";
+            $_SESSION['message_type'] = "warning";
+            header('Location: ' . BASE_URL . 'index.php?controller=persona&action=index');
             exit();
         }
     }
