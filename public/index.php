@@ -35,6 +35,7 @@ header("X-Content-Type-Options: nosniff");
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+require_once dirname(__FILE__) . '/../config.php';
 
 // Cargar rutas - aseguramos que el archivo existe antes de incluirlo
 $routerFile = ROUTE_PATH . '/web.php';

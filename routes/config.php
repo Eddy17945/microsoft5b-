@@ -21,6 +21,8 @@ define('ROOT_PATH', dirname(__FILE__));
 define('APP_PATH', ROOT_PATH . '/app');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('PUBLIC_PATH', ROOT_PATH . '/public');
+define('ROUTE_PATH', BASE_PATH . '/routes');
+
 
 // URL base para enlaces y redirecciones
 define('BASE_URL', getBaseUrl());
