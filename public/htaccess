@@ -1,9 +1,19 @@
+# Activar el motor de reescritura
 RewriteEngine On
-RewriteBase /microsoft5b-/public/
 
-# Si es un archivo o directorio real, no hacer nada
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# Establecer la base de reescritura para el entorno de despliegue
+RewriteBase /microsoft5b-/
 
-# Redirigir a index.php manteniendo los parámetros de consulta
+# Si el archivo o directorio solicitado existe físicamente, no hacer nada
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirigir todas las demás solicitudes a index.php
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Configurar PHP (si el servidor lo permite)
+<IfModule mod_php7.c>
+    php_value display_errors 1
+    php_value display_startup_errors 1
+</IfModule>
