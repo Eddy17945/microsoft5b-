@@ -4,7 +4,7 @@ $content = ob_get_clean();
 
 <h4>Agregar Nueva Dirección</h4>
 
-<form action="/public/index.php?controller=direccion&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=direccion&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     
     <?php if (!isset($_GET['id_persona'])): ?>
@@ -42,9 +42,9 @@ $content = ob_get_clean();
     
     <button type="submit" class="btn btn-primary">Guardar</button>
     <?php if (isset($_GET['id_persona'])): ?>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
     <?php else: ?>
-    <a href="/public/index.php?controller=direccion&action=index" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=direccion&action=index" class="btn btn-secondary">Cancelar</a>
     <?php endif; ?>
 </form>
 

@@ -5,7 +5,7 @@ if (ob_get_level() == 0) ob_start();
 
 <h4><?= isset($_GET['id_persona']) ? 'Agregar Teléfono' : 'Agregar Nuevo Teléfono' ?></h4>
 
-<form action="/public/index.php?controller=telefono&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=telefono&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     
     <?php if (!isset($_GET['id_persona'])): ?>
@@ -45,9 +45,9 @@ if (ob_get_level() == 0) ob_start();
     
     <button type="submit" class="btn btn-primary">Guardar</button>
     <?php if (isset($_GET['id_persona'])): ?>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
     <?php else: ?>
-    <a href="/public/index.php?controller=telefono&action=index" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=telefono&action=index" class="btn btn-secondary">Cancelar</a>
     <?php endif; ?>
 </form>
 <?php
