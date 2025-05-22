@@ -6,7 +6,7 @@ $estadosCiviles = $estadosCiviles ?? [];
 
 <h2>Editar Persona</h2>
 
-<form action="/public/index.php?controller=persona&action=update" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=persona&action=update" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
     <input type="hidden" name="id_persona" value="<?= htmlspecialchars($this->persona->id_persona) ?>">
     
@@ -50,5 +50,5 @@ $estadosCiviles = $estadosCiviles ?? [];
     </div>
     
     <button type="submit" class="btn btn-primary">Actualizar</button>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $this->persona->id_persona ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $this->persona->id_persona ?>" class="btn btn-secondary">Cancelar</a>
 </form>
