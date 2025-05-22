@@ -5,7 +5,7 @@ $content = ob_get_clean();
 
 <div class="d-flex justify-content-between mb-4">
     <h2>Listado de Personas</h2>
-    <a href="/public/index.php?controller=persona&action=create" class="btn btn-primary">
+    <a href="<?= BASE_URL ?> /public/index.php?controller=persona&action=create" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Nueva Persona
     </a>
 </div>
