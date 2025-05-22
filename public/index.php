@@ -36,7 +36,7 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-require_once 'config/config.php';
+require_once 'routes/config.php';
 
 // Cargar rutas - aseguramos que el archivo existe antes de incluirlo
 $routerFile = ROUTE_PATH . '/web.php';
