@@ -7,7 +7,7 @@ $estadosCiviles = $estadosCiviles ?? [];
 
 <h2>Crear Nueva Persona</h2>
 
-<form action="/public/index.php?controller=persona&action=store" method="POST">
+<form action="<?= BASE_URL ?>/public/index.php?controller=persona&action=store" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
     
     <div class="mb-3">
@@ -46,5 +46,5 @@ $estadosCiviles = $estadosCiviles ?? [];
     </div>
     
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="/public/index.php?controller=persona&action=index" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>/public/index.php?controller=persona&action=index" class="btn btn-secondary">Cancelar</a>
 </form>
