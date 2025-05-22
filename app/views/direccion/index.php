@@ -5,7 +5,7 @@ $content = ob_get_clean();
 
 <div class="d-flex justify-content-between mb-4">
     <h2>Listado de Direcciones</h2>
-    <a href="/public/index.php?controller=direccion&action=create" class="btn btn-primary">
+    <a href="<?= BASE_URL ?>index.php?controller=direccion&action=create" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Nueva Dirección
     </a>
 </div>
@@ -32,13 +32,13 @@ $content = ob_get_clean();
             <td><?= htmlspecialchars($direccion['estado'] ?? '') ?></td>
             <td><?= htmlspecialchars($direccion['codigo_postal'] ?? '') ?></td>
             <td>
-                <a href="/public/index.php?controller=direccion&action=view&id=<?= $direccion['id_direccion'] ?>" class="btn btn-sm btn-info">
+                <a href="<?= BASE_URL ?>index.php?controller=direccion&action=view&id=<?= $direccion['id_direccion'] ?>" class="btn btn-sm btn-info">
                     <i class="bi bi-eye"></i>
                 </a>
-                <a href="/public/index.php?controller=direccion&action=edit&id=<?= $direccion['id_direccion'] ?>" class="btn btn-sm btn-warning">
+                <a href="<?= BASE_URL ?>index.php?controller=direccion&action=edit&id=<?= $direccion['id_direccion'] ?>" class="btn btn-sm btn-warning">
                     <i class="bi bi-pencil"></i>
                 </a>
-                <form action="/public/index.php?controller=direccion&action=delete&id=<?= $direccion['id_direccion'] ?>" method="POST" style="display: inline;">
+                <form action="<?= BASE_URL ?>index.php?controller=direccion&action=delete&id=<?= $direccion['id_direccion'] ?>" method="POST" style="display: inline;">
                     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">
                         <i class="bi bi-trash"></i>
