@@ -4,7 +4,7 @@ $content = ob_get_clean();
 
 <h4>Editar Dirección</h4>
 
-<form action="/public/index.php?controller=direccion&action=update&id=<?= $this->direccion->id_direccion ?>" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=direccion&action=update&id=<?= $this->direccion->id_direccion ?>" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     
     <div class="mb-3">
@@ -29,7 +29,7 @@ $content = ob_get_clean();
     </div>
     
     <button type="submit" class="btn btn-primary">Actualizar</button>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $this->direccion->id_persona ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $this->direccion->id_persona ?>" class="btn btn-secondary">Cancelar</a>
 </form>
 
 <?php ?>
