@@ -174,3 +174,36 @@ footer {
         font-size: 1.5rem;
     }
 }
+
+/* Forzar texto negro en tablas */
+.table td, .table th {
+    color: #212529 !important;
+}
+
+/* Asegurar que todo el texto sea visible */
+body, .container, .card-body, .card-header {
+    color: #212529 !important;
+}
+
+/* Encabezados de tabla específicamente */
+.table thead th {
+    color: #495057 !important;
+    background-color: #f8f9fa !important;
+}
+
+/* Texto en botones */
+.btn {
+    color: inherit;
+}
+
+.btn-info {
+    color: white !important;
+}
+
+.btn-warning {
+    color: #212529 !important;
+}
+
+.btn-danger {
+    color: white !important;
+}
