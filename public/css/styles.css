@@ -175,31 +175,3 @@ footer {
     }
 }
 
-/* Forzar texto negro en el cuerpo de la tabla */
-.table tbody td {
-    color: #212529 !important;
-    background-color: white !important;
-}
-
-/* Asegurar que las filas striped tengan texto negro */
-.table-striped tbody tr:nth-of-type(odd) td {
-    color: #212529 !important;
-    background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-.table-striped tbody tr:nth-of-type(even) td {
-    color: #212529 !important;
-    background-color: white !important;
-}
-
-/* Hover en las filas */
-.table-hover tbody tr:hover td {
-    color: #212529 !important;
-    background-color: rgba(0, 0, 0, 0.075) !important;
-}
-
-/* Encabezado oscuro con texto blanco */
-.table-dark th {
-    color: white !important;
-    background-color: #343a40 !important;
-}
