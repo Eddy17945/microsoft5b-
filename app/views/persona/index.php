@@ -17,6 +17,11 @@ $content = ob_get_clean();
     </div>
 <?php else: ?>
     <div class="table-responsive">
+        <style>
+.table tbody td {
+    color: #000 !important;
+}
+</style>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
