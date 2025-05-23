@@ -20,8 +20,8 @@
                         <p><strong>Descripción:</strong> <?php echo $this->estadoCivil->descripcion; ?></p>
                         
                         <div class="mt-3">
-                            <a href="index.php?controller=estadocivil&action=edit&id=<?php echo $this->estadoCivil->id_estadocivil; ?>" class="btn btn-primary">Editar</a>
-                            <a href="index.php?controller=estadocivil&action=index" class="btn btn-secondary">Volver</a>
+                            <a href="<?= BASE_URL ?>index.php?controller=estadocivil&action=edit&id=<?php echo $this->estadoCivil->id_estadocivil; ?>" class="btn btn-primary">Editar</a>
+                            <a href="<?= BASE_URL ?>index.php?controller=estadocivil&action=index" class="btn btn-secondary">Volver</a>
                         </div>
                     </div>
                 </div>
