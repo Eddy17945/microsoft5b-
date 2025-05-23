@@ -175,35 +175,31 @@ footer {
     }
 }
 
-/* Forzar texto negro en tablas */
-.table td, .table th {
+/* Forzar texto negro en el cuerpo de la tabla */
+.table tbody td {
     color: #212529 !important;
+    background-color: white !important;
 }
 
-/* Asegurar que todo el texto sea visible */
-body, .container, .card-body, .card-header {
+/* Asegurar que las filas striped tengan texto negro */
+.table-striped tbody tr:nth-of-type(odd) td {
     color: #212529 !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Encabezados de tabla específicamente */
-.table thead th {
-    color: #495057 !important;
-    background-color: #f8f9fa !important;
+.table-striped tbody tr:nth-of-type(even) td {
+    color: #212529 !important;
+    background-color: white !important;
 }
 
-/* Texto en botones */
-.btn {
-    color: inherit;
+/* Hover en las filas */
+.table-hover tbody tr:hover td {
+    color: #212529 !important;
+    background-color: rgba(0, 0, 0, 0.075) !important;
 }
 
-.btn-info {
+/* Encabezado oscuro con texto blanco */
+.table-dark th {
     color: white !important;
-}
-
-.btn-warning {
-    color: #212529 !important;
-}
-
-.btn-danger {
-    color: white !important;
+    background-color: #343a40 !important;
 }
