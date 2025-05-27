@@ -1,4 +1,5 @@
 <?php
+// AndreinaC18 - Andreina Crespo actualizó la clase Persona
 class Persona {
     private $conn;
     private $table_name = "persona";
