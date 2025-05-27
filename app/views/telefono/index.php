@@ -1,5 +1,5 @@
 <?php
-// Asegurarse de que se está capturando el output buffer
+// Tamara Becerra hizo el código de la clase TelefonoController
 if (ob_get_level() == 0) ob_start();
 ?>
 

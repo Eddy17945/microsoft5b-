@@ -1,4 +1,5 @@
 <?php
+// Tamara Becerra hizo el código de la clase TelefonoController
 class TelefonoController {
     private $db;
     private $telefono;
