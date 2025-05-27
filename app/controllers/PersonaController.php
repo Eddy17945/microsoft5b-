@@ -1,4 +1,5 @@
 <?php
+// Andreina Crespo - AndreinaC18 hizo el código de la clase PersonaController
 class PersonaController {
     private $db;
     private $persona;
