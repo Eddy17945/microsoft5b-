@@ -22,7 +22,7 @@ if (ob_get_level() == 0) ob_start();
 
     <div class="d-flex justify-content-between mb-4">
         <h2>Listado de Sexos</h2>
-        <a href="/public/index.php?controller=sexo&action=create" class="btn btn-primary">
+        <a href="<?= BASE_URL ?>index.php?controller=sexo&action=create" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Nuevo Sexo
         </a>
     </div>
@@ -42,13 +42,13 @@ if (ob_get_level() == 0) ob_start();
                 <td><?= htmlspecialchars($sexo['id_sexo'] ?? '') ?></td>
                 <td><?= htmlspecialchars($sexo['descripcion'] ?? '') ?></td>
                 <td>
-                    <a href="/public/index.php?controller=sexo&action=view&id=<?= $sexo['id_sexo'] ?>" class="btn btn-sm btn-info">
+                    <a href="<?= BASE_URL ?>index.php?controller=sexo&action=view&id=<?= $sexo['id_sexo'] ?>" class="btn btn-sm btn-info">
                         <i class="bi bi-eye"></i>
                     </a>
-                    <a href="/public/index.php?controller=sexo&action=edit&id=<?= $sexo['id_sexo'] ?>" class="btn btn-sm btn-warning">
+                    <a href="<?= BASE_URL ?>index.php?controller=sexo&action=edit&id=<?= $sexo['id_sexo'] ?>" class="btn btn-sm btn-warning">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <form action="/public/index.php?controller=sexo&action=delete&id=<?= $sexo['id_sexo'] ?>" method="POST" style="display: inline;">
+                    <form action="<?= BASE_URL ?>index.php?controller=sexo&action=delete&id=<?= $sexo['id_sexo'] ?>" method="POST" style="display: inline;">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este registro?')">
                             <i class="bi bi-trash"></i>

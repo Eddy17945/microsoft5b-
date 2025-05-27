@@ -5,7 +5,7 @@ if (ob_get_level() == 0) ob_start();
 
 <h4>Editar Teléfono</h4>
 
-<form action="/public/index.php?controller=telefono&action=update&id=<?= $this->telefono->id_telefono ?>" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=telefono&action=update&id=<?= $this->telefono->id_telefono ?>" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     
     <div class="mb-3">
@@ -25,7 +25,7 @@ if (ob_get_level() == 0) ob_start();
     </div>
     
     <button type="submit" class="btn btn-primary">Actualizar</button>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $this->telefono->id_persona ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $this->telefono->id_persona ?>" class="btn btn-secondary">Cancelar</a>
 </form>
 
 <?php

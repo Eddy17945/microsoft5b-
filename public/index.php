@@ -1,4 +1,30 @@
 <?php
+// Habilitar errores para depuración (Eliminar en producción)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Definir la ruta base del proyecto y otras rutas importantes
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/app');
+define('CONFIG_PATH', BASE_PATH . '/config');
+define('ROUTE_PATH', BASE_PATH . '/routes');
+define('PUBLIC_PATH', BASE_PATH . '/public');
+
+// Determinar la URL base (método más confiable)
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+$requestUri = $_SERVER['REQUEST_URI'];
+
+// Asegurar que termina con una barra diagonal
+if (substr($scriptDir, -1) !== '/') {
+    $scriptDir .= '/';
+}
+
+// Definir BASE_URL para uso en vistas
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+$host = $_SERVER['HTTP_HOST'];
+define('BASE_URL', $protocol . $host . $scriptDir);
+
+// Iniciar sesión
 session_start();
 
 // Configuración de seguridad básica
@@ -10,99 +36,15 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Constantes de rutas
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');  
 
-// Autoload de clases 
-spl_autoload_register(function ($class) {     
-    $file = APP_PATH . '/' . str_replace('\\', '/', $class) . '.php';     
-    if (file_exists($file)) {         
-        require $file;     
-    } 
-});  
+$routerFile = BASE_PATH  . '/config.php';
 
-// Manejo de errores 
-set_error_handler(function($errno, $errstr, $errfile, $errline) {     
-    error_log("Error: [$errno] $errstr in $errfile on line $errline");     
-    if (ini_get('display_errors')) {         
-        echo "<div class='alert alert-danger'>Error: $errstr</div>";     
-    } 
-});  
+// Cargar rutas - aseguramos que el archivo existe antes de incluirlo
+$routerFile = ROUTE_PATH . '/web.php';
 
-// Obtener parámetros de la URL 
-$controller = $_GET['controller'] ?? 'persona'; 
-$action = $_GET['action'] ?? 'index'; 
-$id = $_GET['id'] ?? null;  
-
-// Validar y sanitizar entradas 
-$controller = preg_replace('/[^a-z]/', '', strtolower($controller)); 
-$action = preg_replace('/[^a-z]/', '', strtolower($action)); 
-$id = filter_var($id, FILTER_VALIDATE_INT);  
-
-// Cargar configuración de la base de datos 
-require_once APP_PATH . '/config/database.php';
-
-// IMPORTANTE: Asegúrate de que la variable $conn esté disponible desde database.php
-// Si no está disponible directamente, necesitarás ajustar el código adecuadamente
-
-// Definir ruta base de vistas
-define('VIEWS_PATH', APP_PATH . '/views/');
-
-try {     
-    // Inicializar estadísticas
-    $stats = ['personas' => 0, 'direcciones' => 0, 'telefonos' => 0];
-    
-    // Cargar helper de contador si existe y si la conexión está disponible
-    if (isset($conn) && $conn instanceof PDO) {
-        $counterFile = APP_PATH . "/helpers/CounterHelper.php";
-        if (file_exists($counterFile)) {
-            require_once $counterFile;
-            $counter = new CounterHelper($conn);
-            $stats = $counter->getStats();
-        }
-    }
-
-    // Instanciar el controlador     
-    $controllerClassName = ucfirst($controller) . 'Controller';     
-    $controllerFile = APP_PATH . "/controllers/{$controllerClassName}.php";          
-    
-    if (!file_exists($controllerFile)) {         
-        throw new Exception("Controlador no encontrado: {$controllerFile}");     
-    }          
-    
-    // Incluir explícitamente el archivo del controlador
-    require_once $controllerFile;
-    
-    // Instanciar el controlador
-    $controllerInstance = new $controllerClassName();
-    
-    // Verificar que el método (acción) existe
-    if (!method_exists($controllerInstance, $action)) {
-        throw new Exception("Acción no encontrada: {$action}");
-    }
-    
-    // Obtener el contenido de la vista 
-    ob_start(); 
-    if ($id !== false && $id !== null) {     
-        $controllerInstance->$action($id); 
-    } else {     
-        $controllerInstance->$action(); 
-    } 
-    $content = ob_get_clean();  
-    
-    // Incluir layout principal 
-    require VIEWS_PATH . 'layouts/main.php';  
-    
-} catch (PDOException $e) {     
-    error_log("Error de base de datos: " . $e->getMessage());     
-    $_SESSION['error'] = "Error de conexión con la base de datos";     
-    header("Location: error.php");
-    exit();
-} catch (Exception $e) {     
-    error_log("Error general: " . $e->getMessage());     
-    $_SESSION['error'] = $e->getMessage();     
-    header("Location: error.php");
-    exit();
-} 
+if (file_exists($routerFile)) {
+    require_once $routerFile;
+} else {
+    die("Error: El archivo de rutas no existe en: " . $routerFile);
+}
 ?>

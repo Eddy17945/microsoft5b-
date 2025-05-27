@@ -4,13 +4,13 @@
 <div class="d-flex justify-content-between mb-4">
     <h2>Detalles de Persona</h2>
     <div>
-        <a href="/public/index.php?controller=persona&action=edit&id=<?= $this->persona->id_persona ?>" class="btn btn-warning">
+        <a href="<?= BASE_URL ?>index.php?controller=persona&action=edit&id=<?= $this->persona->id_persona ?>" class="btn btn-warning">
             <i class="bi bi-pencil"></i> Editar
         </a>
-        <a href="/public/index.php?controller=persona&action=index" class="btn btn-secondary">
+        <a href="<?= BASE_URL ?>index.php?controller=persona&action=index" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
-        <a href="/public/index.php?controller=direccion&action=byPersona&id_persona=<?= $this->persona->id_persona ?>" class="btn btn-sm btn-info">
+        <a href="<?= BASE_URL ?>index.php?controller=direccion&action=byPersona&id_persona=<?= $this->persona->id_persona ?>" class="btn btn-sm btn-info">
             Ver Direcciones
         </a>
     </div>
@@ -52,53 +52,56 @@
             <?php else: ?>
                 <p>No hay direcciones disponibles.</p>
             <?php endif; ?>
-        <!-- Sección de teléfonos -->
-<div class="card mt-4">
-    <div class="card-header bg-light">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Teléfonos</h5>
-            <a href="/public/index.php?controller=telefono&action=create&id_persona=<?= $this->persona->id_persona ?>" class="btn btn-sm btn-success">
-                <i class="bi bi-plus-circle"></i> Agregar Teléfono
-            </a>
+        </div>
+        
+        <div class="tab-pane fade" id="telefonos" role="tabpanel">
+            <!-- Sección de teléfonos -->
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Teléfonos</h5>
+                        <a href="<?= BASE_URL ?>index.php?controller=telefono&action=create&id_persona=<?= $this->persona->id_persona ?>" class="btn btn-sm btn-success">
+                            <i class="bi bi-plus-circle"></i> Agregar Teléfono
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($telefonos)): ?>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($telefonos as $telefono): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($telefono['numero']) ?></td>
+                                <td><?= htmlspecialchars($telefono['tipo']) ?></td>
+                                <td>
+                                    <a href="<?= BASE_URL ?>index.php?controller=telefono&action=edit&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="<?= BASE_URL ?>index.php?controller=telefono&action=delete&id=<?= $telefono['id_telefono'] ?>" method="POST" style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este teléfono?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php else: ?>
+                    <div class="alert alert-info">No hay teléfonos</div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="card-body">
-        <?php if (!empty($telefonos)): ?>
-        <table class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Número</th>
-                    <th>Tipo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($telefonos as $telefono): ?>
-                <tr>
-                    <td><?= htmlspecialchars($telefono['numero']) ?></td>
-                    <td><?= htmlspecialchars($telefono['tipo']) ?></td>
-                    <td>
-                        <a href="/public/index.php?controller=telefono&action=edit&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        <form action="/public/index.php?controller=telefono&action=delete&id=<?= $telefono['id_telefono'] ?>" method="POST" style="display: inline;">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este teléfono?')">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <?php else: ?>
-        <div class="alert alert-info">No hay teléfonos</div>
-        <?php endif; ?>
-    </div>
-</div>
-    </div>
 </div>
 
-<?php  ?>
-
+<?php ?>

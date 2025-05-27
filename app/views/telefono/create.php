@@ -5,7 +5,7 @@ if (ob_get_level() == 0) ob_start();
 
 <h4><?= isset($_GET['id_persona']) ? 'Agregar Teléfono' : 'Agregar Nuevo Teléfono' ?></h4>
 
-<form action="/public/index.php?controller=telefono&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
+<form action="<?= BASE_URL ?>index.php?controller=telefono&action=store<?= isset($_GET['id_persona']) ? '&id_persona='.$_GET['id_persona'] : '' ?>" method="POST">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
     
     <?php if (!isset($_GET['id_persona'])): ?>
@@ -13,8 +13,8 @@ if (ob_get_level() == 0) ob_start();
         <label for="id_persona" class="form-label">Persona</label>
         <select class="form-select" id="id_persona" name="id_persona" required>
             <option value="">Seleccione una persona</option>
-            <?php foreach ($personas as $persona): ?>
-            <option value="<?= $persona['id_persona'] ?>"><?= htmlspecialchars($persona['nombre'] . ' ' . $persona['apellido']) ?></option>
+            <?php foreach ($personas as $persona_item): ?>
+            <option value="<?= $persona_item['id_persona'] ?>"><?= htmlspecialchars($persona_item['nombre'] . ' ' . $persona_item['apellido']) ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -45,12 +45,11 @@ if (ob_get_level() == 0) ob_start();
     
     <button type="submit" class="btn btn-primary">Guardar</button>
     <?php if (isset($_GET['id_persona'])): ?>
-    <a href="/public/index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=persona&action=view&id=<?= $_GET['id_persona'] ?>" class="btn btn-secondary">Cancelar</a>
     <?php else: ?>
-    <a href="/public/index.php?controller=telefono&action=index" class="btn btn-secondary">Cancelar</a>
+    <a href="<?= BASE_URL ?>index.php?controller=telefono&action=index" class="btn btn-secondary">Cancelar</a>
     <?php endif; ?>
 </form>
-
 <?php
 
 ?>

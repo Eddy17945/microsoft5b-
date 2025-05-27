@@ -8,7 +8,7 @@ if (ob_get_level() == 0) ob_start();
     
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>Teléfonos</h4>
-        <a href="/public/index.php?controller=telefono&action=create" class="btn btn-sm btn-success">
+        <a href="<?= BASE_URL ?>index.php?controller=telefono&action=create" class="btn btn-sm btn-success">
             <i class="bi bi-plus-circle"></i> Agregar Teléfono
         </a>
     </div>
@@ -30,13 +30,13 @@ if (ob_get_level() == 0) ob_start();
                 <td><?= htmlspecialchars($telefono['tipo']) ?></td>
                 <td><?= htmlspecialchars($telefono['nombre'] . ' ' . $telefono['apellido']) ?></td>
                 <td>
-                    <a href="/public/index.php?controller=telefono&action=view&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-info">
+                    <a href="<?= BASE_URL ?>index.php?controller=telefono&action=view&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-info">
                         <i class="bi bi-eye"></i>
                     </a>
-                    <a href="/public/index.php?controller=telefono&action=edit&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-warning">
+                    <a href="<?= BASE_URL ?>index.php?controller=telefono&action=edit&id=<?= $telefono['id_telefono'] ?>" class="btn btn-sm btn-warning">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <form action="/public/index.php?controller=telefono&action=delete&id=<?= $telefono['id_telefono'] ?>" method="POST" style="display: inline;">
+                    <form action="<?= BASE_URL ?>index.php?controller=telefono&action=delete&id=<?= $telefono['id_telefono'] ?>" method="POST" style="display: inline;">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este teléfono?')">
                             <i class="bi bi-trash"></i>

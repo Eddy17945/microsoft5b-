@@ -19,172 +19,161 @@ class DireccionController {
         $this->persona = new Persona($this->db);
     }
     
+    // Display list of all direcciones
     public function index() {
         $result = $this->direccion->readAll();
         $direcciones = $result->fetchAll(PDO::FETCH_ASSOC);
         
-        // Include view
+        // Capturar salida en buffer
+        ob_start();
         include APP_PATH . '/views/direccion/index.php';
+        $content = ob_get_clean();
+        
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
-    
-    // Display form to create a new address
+  
+    // Display form to create a new direccion
     public function create() {
-        $id_persona = isset($_GET['id_persona']) ? $_GET['id_persona'] : null;
+        // Get all personas for the dropdown
+        $result = $this->persona->readAll();
+        $personas = $result->fetchAll(PDO::FETCH_ASSOC);
         
-        if ($id_persona) {
-            // Si se proporciona un id_persona, obtener los datos de la persona
-            $this->persona->id_persona = $id_persona;
-            $this->persona->readOne();
-        } else {
-            // Get all personas para el dropdown
-            $personas = $this->persona->readAll()->fetchAll(PDO::FETCH_ASSOC);
-        }
+        // Capturar salida en buffer
+        ob_start();
+        include APP_PATH .'/views/direccion/create.php';
+        $content = ob_get_clean();
         
-        // Include view
-        include APP_PATH . '/views/direccion/create.php';
+        // Incluir layout principal con contenido
+        include_once APP_PATH . '/views/layouts/main.php';
     }
     
-    // Store a new address in database
+    // Store a new direccion in database
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Verificar token CSRF
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                die("Error: La solicitud no es válida.");
-            }
-            
             // Set direccion property values
-            $this->direccion->id_persona = $_POST['id_persona'] ?? $_GET['id_persona'];
+            $this->direccion->id_persona = $_POST['id_persona'];
             $this->direccion->calle = $_POST['calle'];
             $this->direccion->ciudad = $_POST['ciudad'];
             $this->direccion->estado = $_POST['estado'];
             $this->direccion->codigo_postal = $_POST['codigo_postal'];
             
-            // Create the address
+            // Create the direccion
             if ($this->direccion->create()) {
-                // Redirigir a la vista de la persona si venimos de ahí
-                if (isset($_GET['id_persona'])) {
-                    header('Location: /public/index.php?controller=persona&action=view&id=' . $this->direccion->id_persona);
-                } else {
-                    header('Location: /public/index.php?controller=direccion&action=index');
-                }
+                $_SESSION['message'] = "Dirección creada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
                 exit();
             } else {
                 // If creation failed
+                $_SESSION['message'] = "Error al crear la dirección";
+                $_SESSION['message_type'] = "danger";
+                
+                // Get all personas for the dropdown again
+                $result = $this->persona->readAll();
+                $personas = $result->fetchAll(PDO::FETCH_ASSOC);
+                
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/direccion/create.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             }
         }
     }
-
-    public function byPersona() {
-        if (isset($_GET['id_persona'])) {
-            $id_persona = $_GET['id_persona'];
-            
-            // Get the person data
-            $this->persona->id_persona = $id_persona;
-            $persona = $this->persona->readOne();
-            
-            // Get addresses for this person
-            $result = $this->direccion->readByPersona($id_persona);
-            $direcciones = $result->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Include view
-            include APP_PATH . '/views/direccion/by_persona.php';
-        } else {
-            header('Location: /public/index.php?controller=persona&action=index');
-            exit();
-        }
-    }
     
-    // Display form to edit an address
+    // Display form to edit a direccion
     public function edit() {
         if (isset($_GET['id'])) {
             $this->direccion->id_direccion = $_GET['id'];
             
-            // Get the address data
+            // Get the direccion data
             if ($this->direccion->readOne()) {
-                // Include view
+                // Get all personas for the dropdown
+                $result = $this->persona->readAll();
+                $personas = $result->fetchAll(PDO::FETCH_ASSOC);
+                
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/direccion/edit.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: /public/index.php?controller=direccion&action=index');
+                $_SESSION['message'] = "Dirección no encontrada";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
                 exit();
             }
         }
     }
     
-    // Update an address in database
+    // Update a direccion in database
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Verificar token CSRF
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                die("Error: La solicitud no es válida.");
-            }
-            
             // Set direccion property values
-            $this->direccion->id_direccion = $_GET['id'];
+            $this->direccion->id_direccion = $_POST['id_direccion'];
+            $this->direccion->id_persona = $_POST['id_persona'];
             $this->direccion->calle = $_POST['calle'];
             $this->direccion->ciudad = $_POST['ciudad'];
             $this->direccion->estado = $_POST['estado'];
             $this->direccion->codigo_postal = $_POST['codigo_postal'];
             
-            // Recuperar el id_persona actual
-            $old_direccion = new Direccion($this->db);
-            $old_direccion->id_direccion = $this->direccion->id_direccion;
-            $old_direccion->readOne();
-            $this->direccion->id_persona = $old_direccion->id_persona;
-            
-            // Update the address
+            // Update the direccion
             if ($this->direccion->update()) {
-                header('Location: /public/index.php?controller=persona&action=view&id=' . $this->direccion->id_persona);
+                $_SESSION['message'] = "Dirección actualizada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
                 exit();
             } else {
                 // If update failed
-                include APP_PATH . '/views/direccion/edit.php';
+                $_SESSION['message'] = "Error al actualizar la dirección";
+                $_SESSION['message_type'] = "danger";
+                $this->edit();
             }
         }
     }
-    
-    // Display address details
+
     public function view() {
         if (isset($_GET['id'])) {
             $this->direccion->id_direccion = $_GET['id'];
             
-            // Get the address data
+            // Get the direccion data
             if ($this->direccion->readOne()) {
-                // Get the person's data
-                $this->persona->id_persona = $this->direccion->id_persona;
-                $this->persona->readOne();
-                
-                // Include view
+                // Capturar salida en buffer
+                ob_start();
                 include APP_PATH . '/views/direccion/view.php';
+                $content = ob_get_clean();
+                
+                // Incluir layout principal con contenido
+                include_once APP_PATH . '/views/layouts/main.php';
             } else {
-                header('Location: /public/index.php?controller=direccion&action=index');
+                $_SESSION['message'] = "Dirección no encontrada";
+                $_SESSION['message_type'] = "warning";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
                 exit();
             }
         }
     }
     
-    // Delete an address
+    // Delete a direccion
     public function delete() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
-            // Verificar token CSRF
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                die("Error: La solicitud no es válida.");
-            }
-            
+        if (isset($_GET['id'])) {
             $this->direccion->id_direccion = $_GET['id'];
             
-            // Guardar el id_persona antes de eliminar
-            $old_direccion = new Direccion($this->db);
-            $old_direccion->id_direccion = $this->direccion->id_direccion;
-            $old_direccion->readOne();
-            $id_persona = $old_direccion->id_persona;
-            
             if ($this->direccion->delete()) {
-                // Redirigir a la vista de la persona
-                header('Location: /public/index.php?controller=persona&action=view&id=' . $id_persona);
+                $_SESSION['message'] = "Dirección eliminada exitosamente";
+                $_SESSION['message_type'] = "success";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
                 exit();
             } else {
-                echo "Error al eliminar la dirección.";
+                $_SESSION['message'] = "Error al eliminar la dirección";
+                $_SESSION['message_type'] = "danger";
+                header('Location: ' . BASE_URL . 'index.php?controller=direccion&action=index');
+                exit();
             }
         }
     }
