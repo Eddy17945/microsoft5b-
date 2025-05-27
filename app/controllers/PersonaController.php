@@ -1,4 +1,5 @@
 <?php
+// Andreina Crespo puso la clase PersonaController
 class PersonaController {
     private $db;
     private $persona;
